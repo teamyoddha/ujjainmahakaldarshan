@@ -11,17 +11,20 @@ const whatsappUrl = tour => 'https://wa.me/917024940106?text=' + encodeURICompon
   ? `Hello, I'm interested in the ${tour}. Could you share the itinerary, availability, inclusions and quote?`
   : "Hello, I'm planning a visit to Ujjain and would like details about your services and availability.");
 const photos = [
-  {name:'Mahakaleshwar Temple', text:'A sacred stop in the heart of Ujjain.', file:'7/75/Mahakaleshwar_Temple%2C_Ujjain.jpg', author:'Ashverse', focus:'center 54%'},
-  {name:'Mahakal Lok', text:'Explore the corridor near the temple.', file:'e/eb/Mahakal_lok.jpg', author:'Nilimajhapate', focus:'center 47%'},
-  {name:'Ram Ghat', text:'Make time for the banks of the Shipra.', file:'4/45/Ram_Ghat_ujjain.jpg', author:'Puneet Neeraj 024', focus:'center 57%'},
-  {name:'Omkareshwar', text:'Omkareshwar Jyotirlinga, Mamleshwar Temple and the Narmada riverfront.', file:'1/19/Omkareshwar_-_Narmada.jpg', author:'Shampa Chaturvedi', focus:'center'},
-  {name:'Maheshwar', text:'Explore Maheshwar Fort and Ahilya Ghat on the Narmada.', file:'9/95/Maheshwar_Fort-Ahilya_Ghat.jpg', author:'Gargiekulkarni', focus:'center'},
-  {name:'Indore', text:'Add Rajwada Palace and Indore’s old city to your itinerary.', file:'3/38/Rajwada_indore.jpg', author:'2022maliwal', focus:'center', thumb:960}
+  {name:'Mahakaleshwar Temple', text:'A sacred stop in the heart of Ujjain.', file:'7/75/Mahakaleshwar_Temple%2C_Ujjain.jpg', width:4608, author:'Ashverse', focus:'center 54%'},
+  {name:'Mahakal Lok', text:'Explore the corridor near the temple.', file:'e/eb/Mahakal_lok.jpg', width:1200, author:'Nilimajhapate', focus:'center 47%'},
+  {name:'Ram Ghat', text:'Make time for the banks of the Shipra.', file:'4/45/Ram_Ghat_ujjain.jpg', width:1280, author:'Puneet Neeraj 024', focus:'center 57%'},
+  {name:'Omkareshwar', text:'Omkareshwar Jyotirlinga, Mamleshwar Temple and the Narmada riverfront.', file:'1/19/Omkareshwar_-_Narmada.jpg', width:1280, author:'Shampa Chaturvedi', focus:'center'},
+  {name:'Maheshwar', text:'Explore Maheshwar Fort and Ahilya Ghat on the Narmada.', file:'9/95/Maheshwar_Fort-Ahilya_Ghat.jpg', width:960, author:'Gargiekulkarni', focus:'center'},
+  {name:'Indore', text:'Add Rajwada Palace and Indore’s old city to your itinerary.', file:'3/38/Rajwada_indore.jpg', width:1280, author:'2022maliwal', focus:'center'}
 ];
-const imageUrl = photo => photo.thumb
-  ? `https://thumb.wikimedia.org/wikipedia/commons/thumb/${photo.file}/${photo.thumb}px-${photo.file.split('/').at(-1)}`
-  : 'https://upload.wikimedia.org/wikipedia/commons/' + photo.file;
-const heroImage = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/' + photos[0].file + '/1280px-Mahakaleshwar_Temple%2C_Ujjain.jpg';
+// Serve right-sized Wikimedia thumbnails instead of full-resolution originals.
+const commons = 'https://upload.wikimedia.org/wikipedia/commons/';
+const imageUrl = (photo, size = 500) => size >= photo.width
+  ? commons + photo.file
+  : `${commons}thumb/${photo.file}/${size}px-${photo.file.split('/').at(-1)}`;
+const imageSet = (photo, sizes = [500, 960]) => sizes.map(size => `${imageUrl(photo, size)} ${Math.min(size, photo.width)}w`).join(', ');
+const cardSizes = '(max-width:660px) calc(100vw - 32px), (max-width:1020px) 50vw, 380px';
 const navigation = [['Tour Packages', 'packages'], ['Places to Visit', 'gallery'], ['About', 'about'], ['FAQs', 'faq']];
 const filters = ['All packages', 'Ujjain', 'Jyotirlinga', 'Multi-city'];
 const tours = [
@@ -115,7 +118,7 @@ function TourPackages(){
       {filters.map(label => <button key={label} type="button" aria-pressed={filter === label} onClick={() => setFilter(label)}>{label}</button>)}
     </div>
     <div className="cards tour-grid">{visibleTours.map(option => <article className="tour-card" key={option.id}>
-      <img className="tour-image" src={imageUrl(option.photo)} alt="" loading="lazy" decoding="async" width="480" height="270"/>
+      <img className="tour-image" src={imageUrl(option.photo)} srcSet={imageSet(option.photo)} sizes={cardSizes} alt="" style={{objectPosition:option.photo.focus}} loading="lazy" decoding="async" width="480" height="270"/>
       <div className="tour-content">
         <p className="tour-route"><Icon type="pin"/>{option.route}</p>
         <h3>{option.name}</h3>
@@ -126,8 +129,8 @@ function TourPackages(){
         </div>
       </div>
     </article>)}</div>
-    <dialog className="tour-dialog" ref={dialog} aria-labelledby="tour-title" onClose={() => setTour(null)}>
-      {tour && <>
+    <dialog className="tour-dialog" ref={dialog} aria-labelledby="tour-title" onClose={() => setTour(null)} onClick={event => { if (event.target === dialog.current) dialog.current.close(); }}>
+      {tour && <div className="tour-dialog-body">
         <button type="button" className="tour-close" aria-label="Close itinerary" onClick={() => dialog.current.close()}><Icon type="close"/></button>
         <p className="eyebrow">{tour.route}</p>
         <h2 id="tour-title">{tour.name}</h2>
@@ -135,7 +138,7 @@ function TourPackages(){
         <ul>{tour.stops.map(stop => <li key={stop}>{stop}</li>)}</ul>
         <p>Confirm the final route, transport, stay, pricing and availability with the team before booking. Temple entry follows the temple administration’s rules.</p>
         <ContactActions location={'itinerary_' + tour.id} tour={tour.name}/>
-      </>}
+      </div>}
     </dialog>
   </div></section>;
 }
@@ -150,7 +153,7 @@ function Home(){
         <p className="independent">Independent travel enquiry service</p>
       </div>
       <figure className="hero-visual">
-        <img src={heroImage} alt="The illuminated Mahakaleshwar Temple in Ujjain" width="1280" height="720" fetchPriority="high"/>
+        <img src={imageUrl(photos[0], 1280)} srcSet={imageSet(photos[0], [500, 960, 1280])} sizes="(max-width:660px) calc(100vw - 32px), 50vw" alt="The illuminated Mahakaleshwar Temple in Ujjain" width="1280" height="720" fetchPriority="high"/>
         <figcaption><Icon type="pin"/><span>Mahakaleshwar Temple<small>Ujjain, Madhya Pradesh</small></span></figcaption>
       </figure>
     </div></section>
@@ -176,7 +179,7 @@ function Home(){
       <h2>Places to visit</h2>
       <p className="section-intro">Explore Ujjain’s temples and ghats, then extend your trip to Omkareshwar, Maheshwar or Indore.</p>
       <div className="cards gallery">{photos.map(photo => <figure key={photo.name}>
-        <img src={imageUrl(photo)} alt={photo.name} style={{objectPosition:photo.focus}} loading="lazy" decoding="async" width="480" height="320"/>
+        <img src={imageUrl(photo)} srcSet={imageSet(photo)} sizes={cardSizes} alt={photo.name} style={{objectPosition:photo.focus}} loading="lazy" decoding="async" width="480" height="320"/>
         <figcaption><h3>{photo.name}</h3><p>{photo.text}</p></figcaption>
       </figure>)}</div>
     </div></section>
@@ -215,7 +218,7 @@ function Footer(){
     updatePreference(choice);
     if (dialog.current?.open) dialog.current.close();
   }
-  const options = () => <div className="actions"><button type="button" className="button call" onClick={() => choose('allow')}>Allow measurement</button><button type="button" className="button whatsapp" onClick={() => choose('deny')}>Decline</button></div>;
+  const options = () => <div className="actions"><button type="button" className="button call" onClick={() => choose('allow')}>Allow measurement</button><button type="button" className="button secondary" onClick={() => choose('deny')}>Decline</button></div>;
   return <>
     {ready && !preference && <aside className="privacy-prompt" aria-label="Privacy choices"><div className="wrap"><p>Allow optional analytics and advertising measurement?</p>{options()}</div></aside>}
     <footer><div className="wrap footer"><div><Logo/><p>Independent travel enquiry service.<br/>Ujjain, Madhya Pradesh</p></div>

@@ -9,6 +9,7 @@ const assets = join(target, 'assets');
 const fallbackBinary = process.env.UMMD_ESBUILD_BIN;
 const reactFromCdn = Boolean(fallbackBinary);
 const origin = 'https://ujjainmahakaldarshan.com';
+const ogImage = 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Mahakaleshwar_Temple%2C_Ujjain.jpg/1280px-Mahakaleshwar_Temple%2C_Ujjain.jpg';
 const pages = {
   home: ['index.html', 'Ujjain Mahakal Darshan | Plan Your Ujjain Temple Visit', 'Speak with a local Ujjain team about your Mahakaleshwar visit, temple itinerary and group travel enquiries.'],
   privacy: ['privacy.html', 'Privacy Policy', 'How Ujjain Mahakal Darshan handles enquiries and optional analytics.'],
@@ -37,7 +38,8 @@ for (const [page,[file,title,description]] of Object.entries(pages)) {
 <html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title}${page === 'home' ? '' : ' | Ujjain Mahakal Darshan'}</title>
 <meta name="description" content="${description}"><link rel="canonical" href="${canonical}">
-<link rel="icon" type="image/png" href="assets/favicon.png"><link rel="stylesheet" href="assets/react-site.css">${importMap}
+<meta property="og:type" content="website"><meta property="og:site_name" content="Ujjain Mahakal Darshan"><meta property="og:title" content="${title}"><meta property="og:description" content="${description}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${ogImage}"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#061b49">
+<link rel="icon" type="image/png" href="assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap"><link rel="preconnect" href="https://upload.wikimedia.org"><link rel="stylesheet" href="assets/react-site.css">${importMap}
 <script src="assets/app.js" type="module"></script></head><body data-page="${page}"><div id="root"></div>
 <noscript><main class="section wrap"><h1>${page === 'home' ? 'Plan your visit to Mahakal.' : title}</h1><p>${description}</p><p><a href="tel:+917024940106">Call +91 70249 40106</a> · <a href="https://wa.me/917024940106">WhatsApp</a></p></main></noscript></body></html>`;
   writeFileSync(join(target,file), html);

@@ -16,16 +16,16 @@ header{position:sticky;top:0;z-index:4;background:#fff;border-bottom:1px solid v
 .button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:11px 17px;border:1px solid transparent;border-radius:10px;font-size:.93rem;font-weight:760;text-decoration:none;line-height:1.2;cursor:pointer;white-space:nowrap}
 .button svg{width:19px;height:19px}.button:hover{filter:brightness(.91)}
 .header-call{background:#eef3ff;color:var(--blue);border-color:#dce7ff}
-.actions{display:flex;flex-wrap:wrap;gap:10px}.call{background:var(--orange);color:#160c02}.whatsapp{background:#fff;color:var(--blue);border-color:#d4dcef}
-.dark .whatsapp{background:transparent;color:white;border-color:#ffffff82}
+.actions{display:flex;flex-wrap:wrap;gap:10px}.call{background:var(--orange);color:#160c02}.whatsapp{background:#0f7a4a;color:#fff}.secondary{background:#fff;color:var(--blue);border-color:#d4dcef}
+.dark .whatsapp{border-color:#ffffff40}
 :focus-visible{outline:3px solid #bf4500;outline-offset:3px}.dark :focus-visible,.top :focus-visible{outline-color:#ffd19f}
 .hero{background:var(--navy);color:#fff}.hero-grid{display:grid;grid-template-columns:.96fr 1.04fr;align-items:center;gap:clamp(24px,4vw,68px);padding:32px 0}
 .hero-copy{padding:15px 0}.eyebrow{font-size:.71rem;font-weight:850;letter-spacing:.15em;color:var(--orange-dark);margin:0 0 12px}
 .hero .eyebrow,.contact-panel .eyebrow{color:#ffad72}
 h1,h2,h3{margin:0 0 12px;line-height:1.06;letter-spacing:-.043em}
-h1,h2{font-family:"Instrument Serif",Georgia,serif;font-weight:650}
+h1,h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;letter-spacing:-.02em}
 h1{font-size:clamp(3.25rem,5.3vw,5.2rem)}
-h1 em{display:block;color:#ffad72;font-weight:600}
+h1 em{display:block;color:#ffad72;font-weight:400}
 h2{font-size:clamp(2.35rem,4.4vw,4rem);max-width:21ch}h3{font-size:1.2rem;letter-spacing:-.025em}
 .lead{font-size:clamp(1rem,1.65vw,1.17rem);max-width:43ch;color:#e4edff;margin:20px 0 25px}
 .independent{margin:13px 0 0;color:#b8c7ea;font-size:.8rem}
@@ -56,8 +56,11 @@ footer{border-top:1px solid var(--line);background:#fff}.footer{display:grid;gri
 .privacy-prompt{border-top:1px solid var(--line);background:#fff8ef;padding:11px 0}.privacy-prompt .wrap{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between}.privacy-prompt p{margin:0;font-size:.9rem}.privacy-prompt .button{min-height:39px}
 dialog{width:min(480px,calc(100% - 30px));border:1px solid var(--line);border-radius:16px;padding:24px;color:var(--ink)}dialog h2{font-size:2rem}dialog a{display:inline-block;margin-top:14px}dialog::backdrop{background:#061b49a0}
 .skip{position:fixed;top:8px;left:8px;z-index:9;padding:8px;background:#fff;transform:translateY(-160%)}.skip:focus{transform:none}
-.sticky{position:fixed;right:20px;bottom:19px;z-index:3}.sticky .call{display:none}.sticky .whatsapp{background:var(--blue);color:#fff;border:0;box-shadow:0 4px 20px #061b4940}
-@media(max-width:900px){.header-call{display:none}.wrap{width:calc(100% - 44px)}.hero-grid{gap:25px;padding:40px 0}.section{padding:61px 0}.service{padding:19px}}
+.sticky{position:fixed;right:20px;bottom:19px;z-index:3}.sticky .call{display:none}.sticky .whatsapp{border:0;box-shadow:0 4px 20px #061b4940}
+body:has(dialog[open]){overflow:hidden}
+@media(max-width:900px){.header-call{display:none}.footer{padding-bottom:88px}
+  .sticky{right:0;bottom:0;left:0;background:#fff;border-top:1px solid var(--line);padding:8px 12px max(8px,env(safe-area-inset-bottom))}.sticky .actions{display:grid;grid-template-columns:1fr 1fr;max-width:640px;margin:auto}.sticky .call{display:inline-flex}.sticky .whatsapp{box-shadow:none}
+ .wrap{width:calc(100% - 44px)}.hero-grid{gap:25px;padding:40px 0}.section{padding:61px 0}.service{padding:19px}}
 @media(max-width:660px){
   .wrap{width:calc(100% - 32px)} .header{min-height:66px}.brand img{width:109px}.top .wrap{min-height:29px}
   .menu-toggle{display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--line);background:#fff;color:var(--blue);border-radius:9px}
@@ -66,8 +69,7 @@ dialog{width:min(480px,calc(100% - 30px));border:1px solid var(--line);border-ra
   .hero-grid,.split,.contact-panel,.footer{grid-template-columns:1fr}.hero-grid{padding:25px 0 22px;gap:18px}.hero-copy{padding:7px 0 0}
   h1{font-size:clamp(2.62rem,11.4vw,4.2rem)}.lead{margin:11px 0 16px}.hero-visual{height:clamp(200px,55vw,325px);border-radius:15px}
   .hero-visual figcaption{bottom:9px;left:9px;padding:6px 9px}.section{padding:48px 0;scroll-margin-top:66px}.split{gap:8px}.body-copy{padding-top:0}.cards{grid-template-columns:1fr;gap:13px;margin-top:19px}
-  .gallery img{height:220px}.contact-panel{padding:21px;gap:20px;border-radius:15px}.footer{padding-bottom:88px}.service-action{align-items:flex-start}
-  .sticky{right:0;bottom:0;left:0;background:#fff;border-top:1px solid var(--line);padding:8px 12px max(8px,env(safe-area-inset-bottom))}.sticky .actions{display:grid;grid-template-columns:1fr 1fr}.sticky .call{display:inline-flex}.sticky .whatsapp{box-shadow:none}
+  .gallery img{height:220px}.contact-panel{padding:21px;gap:20px;border-radius:15px}.service-action{align-items:flex-start}
 }
 @media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}}
 
@@ -86,7 +88,7 @@ dialog{width:min(480px,calc(100% - 30px));border:1px solid var(--line);border-ra
 .tour-content ul,.tour-dialog ul{padding-left:19px;margin:0 0 17px;color:var(--muted);line-height:1.55}
 .tour-actions{margin-top:auto}
 .tour-actions .button{padding-inline:12px;min-height:42px}
-.tour-dialog{position:fixed;width:min(540px,calc(100% - 30px));max-height:calc(100dvh - 32px);overflow:auto}
+.tour-dialog{position:fixed;width:min(540px,calc(100% - 30px));max-height:calc(100dvh - 32px);overflow:auto;padding:0}.tour-dialog-body{padding:24px}
 .tour-dialog .eyebrow{padding-right:35px}
 .tour-dialog .button{margin-top:0}
 .tour-close{position:absolute;right:13px;top:13px;display:grid;place-items:center;width:38px;height:38px;color:var(--navy);border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer}
