@@ -10,5 +10,5 @@ This is a React website using the supplied orange and blue logo. Design and page
 
 ## Tracking
 
-GTM-P49GVZBX and GA4 G-1SP9FPG3YE initialise after measurement consent. Call and WhatsApp send call_click and whatsapp_click with cta_location. Avoid duplicate GA4 tags or events inside GTM. Verify in Tag Assistant and GA4 DebugView on the published host. In Google Ads, use one primary conversion source for each click.
+GTM-TK35KQ2K loads in the <head> of every page (snippet in scripts/build.mjs) with Consent Mode v2: Google tags stay in denied mode until the visitor clicks "Allow measurement". GA4 (G-TMKN6DM36T) is configured inside the GTM container, not in the site code. Call and WhatsApp send call_click and whatsapp_click with cta_location. Add GA4 Event tags in GTM (Custom Event triggers call_click and whatsapp_click) to report these clicks. Verify in Tag Assistant and GA4 DebugView on the published host. In Google Ads, use one primary conversion source for each click.
 

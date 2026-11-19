@@ -9,6 +9,19 @@ const assets = join(target, 'assets');
 const fallbackBinary = process.env.UMMD_ESBUILD_BIN;
 const reactFromCdn = Boolean(fallbackBinary);
 const origin = 'https://ujjainmahakaldarshan.com';
+const gtmId = 'GTM-TK35KQ2K';
+// Consent Mode v2 defaults (restoring a saved choice) must run before the GTM snippet.
+const gtmHead = `<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}var ummdChoice;try{ummdChoice=localStorage.getItem('ummd-measurement')}catch(e){}var ummdState=ummdChoice==='allow'?'granted':'denied';gtag('consent','default',{analytics_storage:ummdState,ad_storage:ummdState,ad_user_data:ummdState,ad_personalization:'denied',wait_for_update:500});</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${gtmId}');</script>
+<!-- End Google Tag Manager -->`;
+const gtmBody = `<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->`;
 const ogImage = 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Mahakaleshwar_Temple%2C_Ujjain.jpg/1280px-Mahakaleshwar_Temple%2C_Ujjain.jpg';
 const pages = {
   home: ['index.html', 'Ujjain Mahakal Darshan | Plan Your Ujjain Temple Visit', 'Speak with a local Ujjain team about your Mahakaleshwar visit, temple itinerary and group travel enquiries.'],
@@ -35,12 +48,16 @@ const importMap = reactFromCdn ? '<script type="importmap">{"imports":{"react":"
 for (const [page,[file,title,description]] of Object.entries(pages)) {
   const canonical = origin + '/' + (page === 'home' ? '' : file);
   const html = `<!doctype html>
-<html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en-IN"><head><meta charset="utf-8">
+${gtmHead}
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title}${page === 'home' ? '' : ' | Ujjain Mahakal Darshan'}</title>
 <meta name="description" content="${description}"><link rel="canonical" href="${canonical}">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Ujjain Mahakal Darshan"><meta property="og:title" content="${title}"><meta property="og:description" content="${description}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${ogImage}"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#061b49">
 <link rel="icon" type="image/png" href="assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap"><link rel="preconnect" href="https://upload.wikimedia.org"><link rel="stylesheet" href="assets/react-site.css">${importMap}
-<script src="assets/app.js" type="module"></script></head><body data-page="${page}"><div id="root"></div>
+<script src="assets/app.js" type="module"></script></head><body data-page="${page}">
+${gtmBody}
+<div id="root"></div>
 <noscript><main class="section wrap"><h1>${page === 'home' ? 'Plan your visit to Mahakal.' : title}</h1><p>${description}</p><p><a href="tel:+917024940106">Call +91 70249 40106</a> · <a href="https://wa.me/917024940106">WhatsApp</a></p></main></noscript></body></html>`;
   writeFileSync(join(target,file), html);
 }

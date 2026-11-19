@@ -1,11 +1,10 @@
-const containerId = 'GTM-P49GVZBX';
-const measurementId = 'G-1SP9FPG3YE';
+// Google Tag Manager (GTM-TK35KQ2K) is loaded in every page's <head> by scripts/build.mjs,
+// together with Consent Mode v2 defaults. This module only updates consent and pushes events.
+// GA4 is configured inside the GTM container, so no gtag.js is loaded here.
 const preferenceKey = 'ummd-measurement';
 const layer = window.dataLayer = window.dataLayer || [];
-let allowed = false;
-let loaded = false;
 
-function googleTag() { layer.push(arguments); }
+function gtag() { layer.push(arguments); }
 
 export function getPreference() {
   try { return localStorage.getItem(preferenceKey); }
@@ -14,29 +13,11 @@ export function getPreference() {
 function consent(state) {
   return { analytics_storage: state, ad_storage: state, ad_user_data: state, ad_personalization: 'denied' };
 }
-function loadTags() {
-  loaded = true;
-  googleTag('consent', 'default', consent('granted'));
-  googleTag('js', new Date());
-  googleTag('config', measurementId);
-  layer.push({'gtm.start':Date.now(),event:'gtm.js'});
-  for (const path of ['gtag/js?id=' + measurementId, 'gtm.js?id=' + containerId]) {
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://www.googletagmanager.com/' + path;
-    document.head.append(script);
-  }
-}
 export function setPreference(value) {
-  allowed = value === 'allow';
   try { localStorage.setItem(preferenceKey, value); } catch {}
-  window['ga-disable-' + measurementId] = !allowed;
-  if (allowed && !loaded) loadTags();
-  else if (loaded) googleTag('consent', 'update', consent(allowed ? 'granted' : 'denied'));
+  gtag('consent', 'update', consent(value === 'allow' ? 'granted' : 'denied'));
 }
+// Call and WhatsApp clicks reach GTM as dataLayer events; Google tags respect the consent state.
 export function track(action, location) {
-  if (!allowed) return;
-  layer.push({event:action,cta_location:location});
-  googleTag('event',action,{send_to:measurementId,cta_location:location});
+  layer.push({event: action, cta_location: location});
 }
-
